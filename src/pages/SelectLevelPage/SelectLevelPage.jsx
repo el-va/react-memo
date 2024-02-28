@@ -1,10 +1,20 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./SelectLevelPage.module.css";
 import { useState } from "react";
+import { Checkbox } from "../../components/Checkbox/Checkbox";
+import useLevel from "../../hooks/useLevel";
 
 export function SelectLevelPage() {
-  const { level, setLevel } = useState(null);
+  const { changeLevelMode } = useLevel();
+
+  //"hard"?
+  const { level, setLevel } = useState("hard");
   const navigate = useNavigate();
+
+  // неправильно
+  function changeLevel() {
+    setLevel();
+  }
 
   return (
     <div className={styles.container}>
@@ -18,26 +28,38 @@ export function SelectLevelPage() {
                 type="radio"
                 value="3"
                 checked={level === 3}
-                onChange={event => setLevel(event.target.value)}
+                onChange={event => changeLevel(event.target.value)}
               />
               1
             </label>
           </li>
           <li className={styles.level}>
-            <Link className={styles.levelLink} to="/game/6">
+            <label className={styles.levelLink}>
+              <input
+                className={styles.levelLink}
+                type="radio"
+                value="6"
+                checked={level === 6}
+                onChange={event => changeLevel(event.target.value)}
+              />
               2
-            </Link>
+            </label>
           </li>
           <li className={styles.level}>
-            <Link className={styles.levelLink} to="/game/9">
+            <label className={styles.levelLink}>
+              <input
+                className={styles.levelLink}
+                type="radio"
+                value="9"
+                checked={level === 9}
+                onChange={event => changeLevel(event.target.value)}
+              />
               3
-            </Link>
+            </label>
           </li>
         </ul>
         <div>
-          <label className={styles.checkbox} htmlFor="checkbox">
-            Игра на 3 попытки
-          </label>
+          <Checkbox onClick={changeLevelMode}>Игра на 3 попытки</Checkbox>
           <input type="checkbox" className={styles.checkbox} id="checkbox" />
         </div>
         <div>

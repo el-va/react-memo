@@ -3,11 +3,16 @@ import { createContext, useState } from "react";
 export const LevelContext = createContext(null);
 
 export function LevelProvider({ children }) {
-  const [levels, setLevel] = useState(null);
+  const [isEasy, setIsEasy] = useState("hard");
 
-  function changeLevel() {
-    setLevel();
+  function changeLevelMode() {
+    if (isEasy === "hard") {
+      setIsEasy("easy");
+    }
+    if (isEasy === "easy") {
+      setIsEasy("hard");
+    }
   }
 
-  return <LevelContext.Provider value={{ levels, changeLevel }}>{children}</LevelContext.Provider>;
+  return <LevelContext.Provider value={{ isEasy, changeLevelMode }}>{children}</LevelContext.Provider>;
 }
