@@ -60,7 +60,6 @@ export function SelectLevelPage() {
         </ul>
         <div>
           <Checkbox onClick={changeLevelMode}>Игра на 3 попытки</Checkbox>
-          <input type="checkbox" className={styles.checkbox} id="checkbox" />
         </div>
         <div>
           <button
