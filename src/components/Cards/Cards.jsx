@@ -5,6 +5,7 @@ import styles from "./Cards.module.css";
 import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
 import { Button } from "../../components/Button/Button";
 import { Card } from "../../components/Card/Card";
+import useLevel from "../../hooks/useLevel";
 
 // Игра закончилась
 const STATUS_LOST = "STATUS_LOST";
@@ -82,6 +83,13 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
    * - "Игрок проиграл", если на поле есть две открытые карты без пары
    * - "Игра продолжается", если не случилось первых двух условий
    */
+
+  // Получаем значение режима игры из контекста
+  const { isEasy } = useLevel();
+  // Количество попытокв режиме сложной игры
+  // Если легкий режим,то 3 попытки, если сложный, то 1
+  const [attempts, setAttempts] = useState(isEasy ? 3 : 1);
+
   const openCard = clickedCard => {
     // Если карта уже открыта, то ничего не делаем
     if (clickedCard.open) {
@@ -122,6 +130,20 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
       return false;
     });
+
+    if (isEasy) {
+      if (openCardsWithoutPair.length === 2) {
+        setAttempts(prev => prev - 1);
+        setTimeout(() => {
+          setCards(cards.map(card => (openCardsWithoutPair.includes(card) ? { ...card, open: false } : card)));
+        }, 1000);
+      }
+
+      if (attempts === 0) {
+        finishGame(STATUS_LOST);
+      }
+      return;
+    }
 
     const playerLost = openCardsWithoutPair.length >= 2;
 
